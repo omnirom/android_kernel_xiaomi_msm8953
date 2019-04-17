@@ -53,6 +53,7 @@
 #include <linux/oom.h>
 #include <linux/writeback.h>
 #include <linux/shm.h>
+#include <linux/cpufreq.h>
 
 #include <asm/uaccess.h>
 #include <asm/unistd.h>

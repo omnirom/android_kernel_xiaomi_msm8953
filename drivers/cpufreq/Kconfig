@@ -113,15 +113,6 @@ config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
 	  governor. If unsure have a look at the help section of the
 	  driver. Fallback governor will be the performance governor.
 
-config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
- 	  bool "zzmoove"
- 	  select CPU_FREQ_GOV_ZZMOOVE
- 	  select CPU_FREQ_GOV_PERFORMANCE
- 	  help
- 	  Use the CPUFreq governor 'zzmoove' as default, using predefined
- 	  frequency lookup tables and optimized scaling triggers instead of
- 	  % frequency steps to get smooth up/downscaling dependant on CPU load.
-
 config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	bool "interactive"
 	select CPU_FREQ_GOV_INTERACTIVE
@@ -201,15 +192,6 @@ config CPU_FREQ_GOV_ONDEMAND
 
 	  If in doubt, say N.
 
-config CPU_FREQ_GOV_ZZMOOVE
- 	tristate "'zzmoove' cpufreq governor"
- 	depends on CPU_FREQ
- 	help
- 	  'zzmoove' - based on cpufreq_conservative, using predefined
- 	  frequency lookup tables and optimized scaling triggers instead of
- 	  % frequency steps to get smooth up/downscaling dependant on CPU load.
- 	  If in doubt, say N.
-
 config CPU_FREQ_GOV_INTERACTIVE
 	bool "'interactive' cpufreq policy governor"
 	help
@@ -260,6 +242,39 @@ config CPU_FREQ_GOV_SCHED
 	  does) but instead is event-driven by the scheduler.
 
 	  If in doubt, say N.
+
+config CPU_INPUT_BOOST
+	bool "CPU Input Boost"
+	depends on !CPU_BOOST
+	help
+	  Boosts the CPU on touchscreen and touchpad input, and allows for
+	  boosting on other custom events, mainly which is intended to be for
+	  boosting when there is a new frame ready to be rendered to the
+	  display. The boost frequencies for this driver should be set so that
+	  frame drops are near-zero at the boosted frequencies and power
+	  consumption is minimized at said frequency combination.
+
+if CPU_INPUT_BOOST
+
+config INPUT_BOOST_DURATION_MS
+	int "Input boost duration"
+	default "100"
+	help
+	  Input boost duration in milliseconds.
+
+config WAKE_BOOST_DURATION_MS
+	int "Wake boost duration"
+	default "1000"
+	help
+	  Wake boost duration in milliseconds.
+
+config INPUT_BOOST_FREQ
+	int "CPU input boost freq"
+	default "0"
+	help
+	Input boost frequency for the CPU.
+
+endif
 
 comment "CPU frequency scaling drivers"
 
